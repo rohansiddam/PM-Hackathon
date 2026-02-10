@@ -5,17 +5,39 @@ import { TransitPlanCard } from './src/components/TransitPlanCard';
 import { QuickActions } from './src/components/QuickActions';
 import { TaskBreakdownCard } from './src/components/TaskBreakdownCard';
 import { SyncBanner } from './src/components/SyncBanner';
+import { TaskDeconstructorCard } from './src/components/TaskDeconstructorCard';
+import { WorkingModeView } from './src/components/WorkingModeView';
 import { useOrchestrator } from './src/hooks/useOrchestrator';
 
 export default function App() {
   const {
     state,
+    assignmentInput,
+    setAssignmentInput,
+    isDeconstructing,
+    deconstructorError,
     addDemoTask,
     markStepDone,
     refreshTransit,
     quickResetDay,
-    forceSync
+    forceSync,
+    startWorkingMode,
+    resumeWorkingMode,
+    completeWorkingStep,
+    toggleWorkingTimer,
+    exitWorkingMode
   } = useOrchestrator();
+
+  if (state.activeView === 'WORKING' && state.workingMode) {
+    return (
+      <WorkingModeView
+        workingMode={state.workingMode}
+        onToggleTimer={toggleWorkingTimer}
+        onCompleteStep={completeWorkingStep}
+        onExit={exitWorkingMode}
+      />
+    );
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-calm">
@@ -35,6 +57,16 @@ export default function App() {
         />
 
         <FocusCard nextStep={state.nextStepLabel} currentStressScore={state.stressScore} />
+
+        <TaskDeconstructorCard
+          value={assignmentInput}
+          onChange={setAssignmentInput}
+          onDeconstruct={startWorkingMode}
+          onResume={resumeWorkingMode}
+          hasActiveSession={Boolean(state.workingMode)}
+          busy={isDeconstructing}
+          errorMessage={deconstructorError}
+        />
 
         <QuickActions
           onAddTask={addDemoTask}

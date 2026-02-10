@@ -1,11 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { AcademicTask, SyncAction, TransitTrip } from '../types/domain';
+import { AcademicTask, SyncAction, TransitTrip, WorkingModeState } from '../types/domain';
 
 const KEYS = {
   task: '@chronos/task',
   trip: '@chronos/trip',
   queue: '@chronos/sync-queue',
-  lastSyncedAt: '@chronos/last-synced'
+  lastSyncedAt: '@chronos/last-synced',
+  workingMode: '@chronos/working-mode'
 } as const;
 
 async function readJson<T>(key: string, fallback: T): Promise<T> {
@@ -34,6 +35,10 @@ export const storage = {
 
   getQueue: () => readJson<SyncAction[]>(KEYS.queue, []),
   setQueue: (queue: SyncAction[]) => writeJson(KEYS.queue, queue),
+
+  getWorkingMode: () => readJson<WorkingModeState | null>(KEYS.workingMode, null),
+  setWorkingMode: (workingMode: WorkingModeState) => writeJson(KEYS.workingMode, workingMode),
+  clearWorkingMode: () => AsyncStorage.removeItem(KEYS.workingMode),
 
   getLastSyncedAt: () => AsyncStorage.getItem(KEYS.lastSyncedAt),
   setLastSyncedAt: (value: string) => AsyncStorage.setItem(KEYS.lastSyncedAt, value),

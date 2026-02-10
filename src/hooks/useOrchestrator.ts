@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { watchNetwork } from '../lib/network';
-import { AppState, AcademicTask, TransitTrip } from '../types/domain';
+import { AcademicTask, AppState, TransitTrip } from '../types/domain';
+import { storage } from '../lib/storage';
+import { syncService } from '../services/syncService';
 import { taskService } from '../services/taskService';
 import { transitService } from '../services/transitService';
-import { syncService } from '../services/syncService';
-import { storage } from '../lib/storage';
+import { workingModeService } from '../services/workingModeService';
 
 const fallbackTask: AcademicTask = {
   id: 'local-quickstart',
@@ -32,8 +33,12 @@ export const useOrchestrator = () => {
     transitTrip: fallbackTrip,
     primaryTask: fallbackTask,
     nextStepLabel: fallbackTask.steps[0].label,
-    stressScore: 42
+    stressScore: 42,
+    activeView: 'HOME'
   });
+  const [assignmentInput, setAssignmentInput] = useState('');
+  const [isDeconstructing, setIsDeconstructing] = useState(false);
+  const [deconstructorError, setDeconstructorError] = useState<string>();
 
   const recomputeStress = useCallback((task: AcademicTask) => {
     const remaining = task.steps.filter((s) => !s.done).length;
@@ -47,11 +52,12 @@ export const useOrchestrator = () => {
 
   useEffect(() => {
     const boot = async () => {
-      const [task, trip, pending, lastSyncedAt] = await Promise.all([
+      const [task, trip, pending, lastSyncedAt, savedWorkingMode] = await Promise.all([
         taskService.createOrFetchPrimaryTask().catch(() => fallbackTask),
         transitService.getPlan().catch(() => fallbackTrip),
         storage.getQueue().then((q) => q.length),
-        storage.getLastSyncedAt()
+        storage.getLastSyncedAt(),
+        workingModeService.resume()
       ]);
 
       const derived = refreshDerived(task);
@@ -61,6 +67,8 @@ export const useOrchestrator = () => {
         transitTrip: trip,
         pendingSync: pending,
         lastSyncedAt: lastSyncedAt ?? undefined,
+        workingMode: savedWorkingMode ?? undefined,
+        activeView: savedWorkingMode ? 'WORKING' : 'HOME',
         ...derived
       }));
     };
@@ -117,6 +125,8 @@ export const useOrchestrator = () => {
 
   const quickResetDay = useCallback(async () => {
     await storage.clearDay();
+    await storage.clearWorkingMode();
+
     const sync = await syncService.enqueue({
       id: `action-${Date.now()}-reset`,
       type: 'DAY_RESET',
@@ -130,6 +140,8 @@ export const useOrchestrator = () => {
       transitTrip: fallbackTrip,
       primaryTask: fallbackTask,
       pendingSync: sync,
+      activeView: 'HOME',
+      workingMode: undefined,
       ...derived
     }));
   }, [refreshDerived]);
@@ -143,14 +155,110 @@ export const useOrchestrator = () => {
     }));
   }, [state.online]);
 
+  const startWorkingMode = useCallback(async () => {
+    if (!assignmentInput.trim()) {
+      setDeconstructorError('Add your assignment description first.');
+      return;
+    }
+
+    setIsDeconstructing(true);
+    setDeconstructorError(undefined);
+
+    try {
+      const workingMode = await workingModeService.startFromDescription(assignmentInput.trim());
+      const pending = await storage.getQueue().then((q) => q.length);
+
+      setState((prev) => ({
+        ...prev,
+        workingMode,
+        activeView: 'WORKING',
+        pendingSync: pending
+      }));
+
+      setAssignmentInput('');
+    } catch {
+      setDeconstructorError('Could not deconstruct this task. Try a shorter description.');
+    } finally {
+      setIsDeconstructing(false);
+    }
+  }, [assignmentInput]);
+
+  const resumeWorkingMode = useCallback(() => {
+    if (!state.workingMode) {
+      return;
+    }
+
+    setState((prev) => ({
+      ...prev,
+      activeView: 'WORKING'
+    }));
+  }, [state.workingMode]);
+
+  const completeWorkingStep = useCallback(async () => {
+    if (!state.workingMode) {
+      return;
+    }
+
+    const updated = await workingModeService.completeActiveStep(state.workingMode);
+    const pending = await storage.getQueue().then((q) => q.length);
+
+    setState((prev) => ({
+      ...prev,
+      workingMode: updated,
+      pendingSync: pending
+    }));
+  }, [state.workingMode]);
+
+  const toggleWorkingTimer = useCallback(async () => {
+    if (!state.workingMode) {
+      return;
+    }
+
+    const updated = await workingModeService.toggleTimer(state.workingMode);
+
+    setState((prev) => ({
+      ...prev,
+      workingMode: updated
+    }));
+  }, [state.workingMode]);
+
+  const exitWorkingMode = useCallback(async () => {
+    if (!state.workingMode) {
+      setState((prev) => ({
+        ...prev,
+        activeView: 'HOME'
+      }));
+      return;
+    }
+
+    await workingModeService.clear(state.workingMode);
+    const pending = await storage.getQueue().then((q) => q.length);
+
+    setState((prev) => ({
+      ...prev,
+      activeView: 'HOME',
+      workingMode: undefined,
+      pendingSync: pending
+    }));
+  }, [state.workingMode]);
+
   const stableState = useMemo(() => state, [state]);
 
   return {
     state: stableState,
+    assignmentInput,
+    setAssignmentInput,
+    isDeconstructing,
+    deconstructorError,
     addDemoTask,
     markStepDone,
     refreshTransit,
     quickResetDay,
-    forceSync
+    forceSync,
+    startWorkingMode,
+    resumeWorkingMode,
+    completeWorkingStep,
+    toggleWorkingTimer,
+    exitWorkingMode
   };
 };

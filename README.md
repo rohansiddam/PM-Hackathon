@@ -13,6 +13,13 @@ Offline-first mobile orchestration for commuter students who need minimal-fricti
 - Explicit offline status with automatic sync queue.
 - Task decomposition into tiny actions (1 to 10 minutes).
 - Reset-day action for fast recovery after interruptions.
+- Working Mode shows only one micro-step at a time.
+
+## Phase B: Micro-Step Task Deconstructor
+- Input: free-text complex assignment (example: "2,000-word research paper").
+- Logic: rule-based task decomposition into "embarrassingly small" sub-steps.
+- Output: a persisted working session with one active step and progress state.
+- Working Mode includes a background-safe timer based on timestamps, so elapsed time keeps tracking across app background/resume.
 
 ## Offline-First Architecture
 - Local-first writes through AsyncStorage.
@@ -36,7 +43,9 @@ npm run serve
 
 ## Folder Guide
 - `App.tsx`: Root shell and flow composition.
-- `src/hooks/useOrchestrator.ts`: Primary state orchestration for transit, tasks, and sync.
+- `src/hooks/useOrchestrator.ts`: Primary state orchestration for transit, deconstructor, working mode, and sync.
+- `src/services/taskDeconstructorService.ts`: Micro-step generation logic.
+- `src/services/workingModeService.ts`: Working mode persistence, timer handling, and step progression.
 - `src/services/`: Domain services and API adapters.
 - `src/lib/`: Shared local persistence, network, and error normalization.
 - `backend/functions/`: Firebase sync endpoint stub.

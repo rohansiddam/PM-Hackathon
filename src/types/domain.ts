@@ -23,11 +23,33 @@ export type AcademicTask = {
   steps: TaskStep[];
 };
 
+export type DeconstructedTaskPlan = {
+  id: string;
+  sourceDescription: string;
+  createdAt: string;
+  steps: TaskStep[];
+};
+
+export type WorkingTimerState = {
+  isRunning: boolean;
+  startedAt?: string;
+  accumulatedSeconds: number;
+};
+
+export type WorkingModeState = {
+  plan: DeconstructedTaskPlan;
+  activeStepIndex: number;
+  timer: WorkingTimerState;
+};
+
 export type SyncActionType =
   | 'TASK_CREATED'
   | 'TASK_STEP_COMPLETED'
   | 'TRANSIT_REFRESHED'
-  | 'DAY_RESET';
+  | 'DAY_RESET'
+  | 'TASK_DECONSTRUCTED'
+  | 'WORKING_STEP_COMPLETED'
+  | 'WORKING_MODE_EXITED';
 
 export type SyncAction = {
   id: string;
@@ -44,4 +66,6 @@ export type AppState = {
   primaryTask: AcademicTask;
   nextStepLabel: string;
   stressScore: number;
+  activeView: 'HOME' | 'WORKING';
+  workingMode?: WorkingModeState;
 };
