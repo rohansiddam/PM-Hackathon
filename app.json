@@ -10,10 +10,17 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.chronos.logistics"
+      "bundleIdentifier": "com.chronos.logistics",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Chronos uses your location to detect your major-specific study hub and show nearby silent co-working peers."
+      }
     },
     "android": {
-      "package": "com.chronos.logistics"
+      "package": "com.chronos.logistics",
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION"
+      ]
     }
   }
 }

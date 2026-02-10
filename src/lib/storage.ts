@@ -1,12 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { AcademicTask, SyncAction, TransitTrip, WorkingModeState } from '../types/domain';
+import { AcademicTask, HubBuilding, SilentCoworkingRoom, SyncAction, TransitTrip, WorkingModeState } from '../types/domain';
 
 const KEYS = {
   task: '@chronos/task',
   trip: '@chronos/trip',
   queue: '@chronos/sync-queue',
   lastSyncedAt: '@chronos/last-synced',
-  workingMode: '@chronos/working-mode'
+  workingMode: '@chronos/working-mode',
+  currentHub: '@chronos/current-hub',
+  hubRoom: '@chronos/hub-room'
 } as const;
 
 async function readJson<T>(key: string, fallback: T): Promise<T> {
@@ -40,10 +42,18 @@ export const storage = {
   setWorkingMode: (workingMode: WorkingModeState) => writeJson(KEYS.workingMode, workingMode),
   clearWorkingMode: () => AsyncStorage.removeItem(KEYS.workingMode),
 
+  getCurrentHub: () => readJson<HubBuilding | null>(KEYS.currentHub, null),
+  setCurrentHub: (hub: HubBuilding) => writeJson(KEYS.currentHub, hub),
+  clearCurrentHub: () => AsyncStorage.removeItem(KEYS.currentHub),
+
+  getHubRoom: () => readJson<SilentCoworkingRoom | null>(KEYS.hubRoom, null),
+  setHubRoom: (room: SilentCoworkingRoom) => writeJson(KEYS.hubRoom, room),
+  clearHubRoom: () => AsyncStorage.removeItem(KEYS.hubRoom),
+
   getLastSyncedAt: () => AsyncStorage.getItem(KEYS.lastSyncedAt),
   setLastSyncedAt: (value: string) => AsyncStorage.setItem(KEYS.lastSyncedAt, value),
 
   clearDay: async () => {
-    await AsyncStorage.multiRemove([KEYS.task, KEYS.trip]);
+    await AsyncStorage.multiRemove([KEYS.task, KEYS.trip, KEYS.workingMode, KEYS.currentHub, KEYS.hubRoom]);
   }
 };

@@ -21,11 +21,21 @@ Offline-first mobile orchestration for commuter students who need minimal-fricti
 - Output: a persisted working session with one active step and progress state.
 - Working Mode includes a background-safe timer based on timestamps, so elapsed time keeps tracking across app background/resume.
 
+## Phase C: Social Overlay & Body Doubling
+- Geolocation-driven major-specific building detection for:
+  - `WEB` (Engineering)
+  - `LNCO` (Humanities)
+- Silent Co-working room UI with icon-only presence avatars to reduce social friction.
+- Presence refresh + open-room flow designed for zero-friction one-tap actions.
+- Backend callable stubs for presence:
+  - `getHubPresence`
+  - `upsertHubPresence`
+
 ## Offline-First Architecture
 - Local-first writes through AsyncStorage.
 - All mutating events are captured as sync actions in a local queue.
 - Network listener auto-flushes queue when connection returns.
-- App remains fully usable without internet for core task and transit workflows.
+- App remains fully usable without internet for core task, transit, and cached hub-room workflows.
 
 ## Run Frontend
 ```bash
@@ -43,18 +53,21 @@ npm run serve
 
 ## Folder Guide
 - `App.tsx`: Root shell and flow composition.
-- `src/hooks/useOrchestrator.ts`: Primary state orchestration for transit, deconstructor, working mode, and sync.
+- `src/hooks/useOrchestrator.ts`: Primary state orchestration for transit, deconstructor, working mode, hubs, and sync.
 - `src/services/taskDeconstructorService.ts`: Micro-step generation logic.
 - `src/services/workingModeService.ts`: Working mode persistence, timer handling, and step progression.
+- `src/services/socialHubService.ts`: Hub detection orchestration and silent-room presence handling.
+- `src/services/geolocationHubService.ts`: Device location to major-hub matching.
 - `src/services/`: Domain services and API adapters.
 - `src/lib/`: Shared local persistence, network, and error normalization.
-- `backend/functions/`: Firebase sync endpoint stub.
+- `backend/functions/`: Firebase sync and hub-presence endpoint stubs.
 
 ## Standardized API Error Policy
 All API adapters normalize failures into one of:
 - `network`
 - `timeout`
 - `unauthorized`
+- `permission`
 - `unknown`
 
 Each maps to calm, user-safe copy that confirms local progress is preserved.

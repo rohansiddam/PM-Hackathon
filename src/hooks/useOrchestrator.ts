@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { watchNetwork } from '../lib/network';
 import { AcademicTask, AppState, TransitTrip } from '../types/domain';
 import { storage } from '../lib/storage';
+import { socialHubService } from '../services/socialHubService';
 import { syncService } from '../services/syncService';
 import { taskService } from '../services/taskService';
 import { transitService } from '../services/transitService';
@@ -39,6 +40,9 @@ export const useOrchestrator = () => {
   const [assignmentInput, setAssignmentInput] = useState('');
   const [isDeconstructing, setIsDeconstructing] = useState(false);
   const [deconstructorError, setDeconstructorError] = useState<string>();
+  const [hubMessage, setHubMessage] = useState('Detect your major-specific building to join silent co-working.');
+  const [isLocatingHub, setIsLocatingHub] = useState(false);
+  const [isRefreshingHubRoom, setIsRefreshingHubRoom] = useState(false);
 
   const recomputeStress = useCallback((task: AcademicTask) => {
     const remaining = task.steps.filter((s) => !s.done).length;
@@ -52,12 +56,14 @@ export const useOrchestrator = () => {
 
   useEffect(() => {
     const boot = async () => {
-      const [task, trip, pending, lastSyncedAt, savedWorkingMode] = await Promise.all([
+      const [task, trip, pending, lastSyncedAt, savedWorkingMode, savedCurrentHub, savedHubRoom] = await Promise.all([
         taskService.createOrFetchPrimaryTask().catch(() => fallbackTask),
         transitService.getPlan().catch(() => fallbackTrip),
         storage.getQueue().then((q) => q.length),
         storage.getLastSyncedAt(),
-        workingModeService.resume()
+        workingModeService.resume(),
+        storage.getCurrentHub(),
+        socialHubService.loadRoomFromCache()
       ]);
 
       const derived = refreshDerived(task);
@@ -68,9 +74,15 @@ export const useOrchestrator = () => {
         pendingSync: pending,
         lastSyncedAt: lastSyncedAt ?? undefined,
         workingMode: savedWorkingMode ?? undefined,
+        currentHub: savedCurrentHub ?? undefined,
+        hubRoom: savedHubRoom ?? undefined,
         activeView: savedWorkingMode ? 'WORKING' : 'HOME',
         ...derived
       }));
+
+      if (savedCurrentHub) {
+        setHubMessage(`Last detected hub: ${savedCurrentHub.code} (${savedCurrentHub.majorTrack}).`);
+      }
     };
 
     boot();
@@ -125,7 +137,6 @@ export const useOrchestrator = () => {
 
   const quickResetDay = useCallback(async () => {
     await storage.clearDay();
-    await storage.clearWorkingMode();
 
     const sync = await syncService.enqueue({
       id: `action-${Date.now()}-reset`,
@@ -142,8 +153,12 @@ export const useOrchestrator = () => {
       pendingSync: sync,
       activeView: 'HOME',
       workingMode: undefined,
+      currentHub: undefined,
+      hubRoom: undefined,
       ...derived
     }));
+
+    setHubMessage('Hub session reset.');
   }, [refreshDerived]);
 
   const forceSync = useCallback(async () => {
@@ -242,6 +257,126 @@ export const useOrchestrator = () => {
     }));
   }, [state.workingMode]);
 
+  const detectMajorHub = useCallback(async () => {
+    setIsLocatingHub(true);
+
+    try {
+      const hub = await socialHubService.detectHub();
+      const pendingAfterDetect = await storage.getQueue().then((q) => q.length);
+
+      if (!hub) {
+        setState((prev) => ({
+          ...prev,
+          currentHub: undefined,
+          hubRoom: undefined,
+          pendingSync: pendingAfterDetect,
+          activeView: prev.activeView === 'HUB' ? 'HOME' : prev.activeView
+        }));
+        setHubMessage('No major-specific building detected nearby. Move closer to WEB or LNCO and retry.');
+        return;
+      }
+
+      const room = await socialHubService.refreshRoom(hub).catch(async () => {
+        const cached = await socialHubService.loadRoomFromCache();
+        if (cached?.hubId === hub.id) {
+          return cached;
+        }
+        return undefined;
+      });
+
+      const pending = await storage.getQueue().then((q) => q.length);
+      setState((prev) => ({
+        ...prev,
+        currentHub: hub,
+        hubRoom: room,
+        pendingSync: pending
+      }));
+
+      setHubMessage(`Detected ${hub.code} (${hub.majorTrack}). Silent room is ready.`);
+    } catch (error) {
+      setHubMessage(error instanceof Error ? error.message : 'Could not detect hub from location right now.');
+    } finally {
+      setIsLocatingHub(false);
+    }
+  }, []);
+
+  const refreshHubRoom = useCallback(async () => {
+    if (!state.currentHub) {
+      setHubMessage('Detect your major hub first.');
+      return;
+    }
+
+    setIsRefreshingHubRoom(true);
+
+    try {
+      const room = await socialHubService.refreshRoom(state.currentHub);
+      const pending = await storage.getQueue().then((q) => q.length);
+
+      setState((prev) => ({
+        ...prev,
+        hubRoom: room,
+        pendingSync: pending
+      }));
+      setHubMessage(`Silent co-working refreshed for ${state.currentHub.code}.`);
+    } catch {
+      const cached = await socialHubService.loadRoomFromCache();
+      if (cached?.hubId === state.currentHub.id) {
+        setState((prev) => ({
+          ...prev,
+          hubRoom: cached
+        }));
+        setHubMessage('Using cached room presence while offline.');
+      } else {
+        setHubMessage('Could not refresh room right now.');
+      }
+    } finally {
+      setIsRefreshingHubRoom(false);
+    }
+  }, [state.currentHub]);
+
+  const openHubRoom = useCallback(async () => {
+    if (!state.currentHub) {
+      setHubMessage('Detect your major hub first.');
+      return;
+    }
+
+    let room = state.hubRoom;
+
+    if (!room || room.hubId !== state.currentHub.id) {
+      setIsRefreshingHubRoom(true);
+      try {
+        room = await socialHubService.refreshRoom(state.currentHub);
+      } catch {
+        const cached = await socialHubService.loadRoomFromCache();
+        room = cached?.hubId === state.currentHub.id ? cached : undefined;
+      } finally {
+        setIsRefreshingHubRoom(false);
+      }
+    }
+
+    if (!room) {
+      setHubMessage('No room presence available yet. Refresh room and try again.');
+      return;
+    }
+
+    await socialHubService.markRoomViewed(state.currentHub.id);
+    const pending = await storage.getQueue().then((q) => q.length);
+
+    setState((prev) => ({
+      ...prev,
+      activeView: 'HUB',
+      hubRoom: room,
+      pendingSync: pending
+    }));
+  }, [state.currentHub, state.hubRoom]);
+
+  const closeHubRoom = useCallback(() => {
+    setState((prev) => ({
+      ...prev,
+      activeView: 'HOME'
+    }));
+  }, []);
+
   const stableState = useMemo(() => state, [state]);
 
   return {
@@ -250,6 +385,9 @@ export const useOrchestrator = () => {
     setAssignmentInput,
     isDeconstructing,
     deconstructorError,
+    hubMessage,
+    isLocatingHub,
+    isRefreshingHubRoom,
     addDemoTask,
     markStepDone,
     refreshTransit,
@@ -259,6 +397,10 @@ export const useOrchestrator = () => {
     resumeWorkingMode,
     completeWorkingStep,
     toggleWorkingTimer,
-    exitWorkingMode
+    exitWorkingMode,
+    detectMajorHub,
+    refreshHubRoom,
+    openHubRoom,
+    closeHubRoom
   };
 };

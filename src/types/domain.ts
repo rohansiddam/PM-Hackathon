@@ -1,4 +1,4 @@
-export type ApiSource = 'UTA' | 'GOOGLE_MAPS' | 'CANVAS';
+export type ApiSource = 'UTA' | 'GOOGLE_MAPS' | 'CANVAS' | 'FIREBASE' | 'LOCATION';
 
 export type TransitTrip = {
   routeName: string;
@@ -42,6 +42,35 @@ export type WorkingModeState = {
   timer: WorkingTimerState;
 };
 
+export type HubId = 'WEB' | 'LNCO';
+
+export type HubBuilding = {
+  id: HubId;
+  code: string;
+  name: string;
+  majorTrack: string;
+  latitude: number;
+  longitude: number;
+  radiusMeters: number;
+};
+
+export type HubMember = {
+  id: string;
+  initials: string;
+  majorTrack: string;
+  isYou?: boolean;
+  lastActiveAt: string;
+};
+
+export type SilentCoworkingRoom = {
+  hubId: HubId;
+  hubCode: string;
+  hubName: string;
+  majorTrack: string;
+  members: HubMember[];
+  updatedAt: string;
+};
+
 export type SyncActionType =
   | 'TASK_CREATED'
   | 'TASK_STEP_COMPLETED'
@@ -49,7 +78,10 @@ export type SyncActionType =
   | 'DAY_RESET'
   | 'TASK_DECONSTRUCTED'
   | 'WORKING_STEP_COMPLETED'
-  | 'WORKING_MODE_EXITED';
+  | 'WORKING_MODE_EXITED'
+  | 'HUB_DETECTED'
+  | 'HUB_ROOM_REFRESHED'
+  | 'HUB_ROOM_VIEWED';
 
 export type SyncAction = {
   id: string;
@@ -66,6 +98,8 @@ export type AppState = {
   primaryTask: AcademicTask;
   nextStepLabel: string;
   stressScore: number;
-  activeView: 'HOME' | 'WORKING';
+  activeView: 'HOME' | 'WORKING' | 'HUB';
   workingMode?: WorkingModeState;
+  currentHub?: HubBuilding;
+  hubRoom?: SilentCoworkingRoom;
 };

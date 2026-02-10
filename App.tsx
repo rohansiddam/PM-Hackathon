@@ -7,6 +7,8 @@ import { TaskBreakdownCard } from './src/components/TaskBreakdownCard';
 import { SyncBanner } from './src/components/SyncBanner';
 import { TaskDeconstructorCard } from './src/components/TaskDeconstructorCard';
 import { WorkingModeView } from './src/components/WorkingModeView';
+import { MajorHubCard } from './src/components/MajorHubCard';
+import { SilentCoworkingRoomView } from './src/components/SilentCoworkingRoomView';
 import { useOrchestrator } from './src/hooks/useOrchestrator';
 
 export default function App() {
@@ -16,6 +18,9 @@ export default function App() {
     setAssignmentInput,
     isDeconstructing,
     deconstructorError,
+    hubMessage,
+    isLocatingHub,
+    isRefreshingHubRoom,
     addDemoTask,
     markStepDone,
     refreshTransit,
@@ -25,7 +30,11 @@ export default function App() {
     resumeWorkingMode,
     completeWorkingStep,
     toggleWorkingTimer,
-    exitWorkingMode
+    exitWorkingMode,
+    detectMajorHub,
+    refreshHubRoom,
+    openHubRoom,
+    closeHubRoom
   } = useOrchestrator();
 
   if (state.activeView === 'WORKING' && state.workingMode) {
@@ -35,6 +44,17 @@ export default function App() {
         onToggleTimer={toggleWorkingTimer}
         onCompleteStep={completeWorkingStep}
         onExit={exitWorkingMode}
+      />
+    );
+  }
+
+  if (state.activeView === 'HUB' && state.hubRoom) {
+    return (
+      <SilentCoworkingRoomView
+        room={state.hubRoom}
+        refreshing={isRefreshingHubRoom}
+        onRefresh={refreshHubRoom}
+        onExit={closeHubRoom}
       />
     );
   }
@@ -57,6 +77,17 @@ export default function App() {
         />
 
         <FocusCard nextStep={state.nextStepLabel} currentStressScore={state.stressScore} />
+
+        <MajorHubCard
+          currentHub={state.currentHub}
+          hubRoom={state.hubRoom}
+          hubMessage={hubMessage}
+          locating={isLocatingHub}
+          refreshing={isRefreshingHubRoom}
+          onDetectHub={detectMajorHub}
+          onOpenRoom={openHubRoom}
+          onRefreshRoom={refreshHubRoom}
+        />
 
         <TaskDeconstructorCard
           value={assignmentInput}
