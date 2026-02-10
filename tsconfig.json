@@ -5,8 +5,13 @@
     "baseUrl": "."
   },
   "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.d.ts"
+    "App.tsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "*.d.ts"
+  ],
+  "exclude": [
+    "backend",
+    "node_modules"
   ]
 }
