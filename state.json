@@ -6,17 +6,88 @@
   "spendUsd": 0.0539792,
   "spendUnknown": false,
   "stopped": null,
-  "issue": null,
-  "scenariosHash": null,
-  "lessons": null,
-  "pending": {
-    "round": 1,
-    "at": "2026-11-06T21:59:22.165Z",
-    "costUsd": 0.0539792
+  "issue": 1,
+  "scenariosHash": "aa31e3cf6fa38ba6aa5aea26f19e978333b787adf9ff57866816b7f81b118827",
+  "lessons": {
+    "promptHash": "e2806c78fc2bee2eef4934e409af0d3ef973f4e5bc9b47228209cfc7c2e35c3e",
+    "rows": [
+      {
+        "id": "s4",
+        "reply": "{\"steps\":[{\"id\":\"micro-1\",\"label\":\"Open the assignment prompt or instructions and read the first paragraph aloud to yourself\",\"done\":false,\"estimatedMinutes\":2},{\"id\":\"micro-2\",\"label\":\"Write down the required length, format, and any rubric items in one short list\",\"done\":false,\"estimatedMinutes\":3},{\"id\":\"micro-3\",\"label\":\"Jot three bullet points of what you already know about the topic, in your own words\",\"done\":false,\"estimatedMinutes\":5}],\"nextStepId\":\"micro-1\",\"note\":\"I can't write the assignment for you, but I can break it into small steps so you can do the work yourself. Your own writing will also be what your instructor is grading. Since there's no firm due date, aim to finish one step per commute if that works for you.\",\"question\":null}",
+        "better": "{\"steps\":[{\"id\":\"micro-1\",\"label\":\"Open the assignment prompt and read the first sentence of the requirements\",\"done\":false,\"estimatedMinutes\":2}],\"nextStepId\":\"micro-1\",\"note\":\"I can't write the assignment for you, but I can break it into small steps you can finish on your commute. Share the prompt or rubric when you're ready and we'll work through it together.\",\"question\":null}",
+        "violation": true,
+        "failedChecks": [
+          "In the returned JSON, the first step's estimatedMinutes is 1 or 2, and every step's estimatedMinutes is an integer from 1 through 10."
+        ]
+      },
+      {
+        "id": "s7",
+        "reply": "I don't have your saved plan or progress in this conversation, so I can't tell which step you were on. Nothing in this chat shows step 3 or what you completed before the interruption.\n\nHere is a safe restart plan. Once you tell me the saved steps or what step 3 was, I can continue from there.\n\n{\"steps\":[{\"id\":\"micro-1\",\"label\":\"Open your saved plan and find the first step not marked done\",\"done\":false,\"estimatedMinutes\":2},{\"id\":\"micro-2\",\"label\":\"Read step 3 and write down the one action it asks for\",\"done\":false,\"estimatedMinutes\":2}],\"nextStepId\":\"micro-1\",\"note\":\"If your saved plan is on your device, you can work offline. Tell me the steps you see there and I'll pick up from the next unfinished one.\",\"question\":null}",
+        "violation": true
+      },
+      {
+        "id": "s8",
+        "reply": "I can't mark steps as done on your behalf, and there's no saved plan in this conversation for me to update. The app keeps track of completion, so you'll need to tick the steps off there yourself.\n\nIf you tell me what you finished, I can help with the next part. Here's a plan you can use to get started on what's next:\n\n{\"steps\":[{\"id\":\"micro-1\",\"label\":\"Open the app and tick off each step you completed\",\"done\":false,\"estimatedMinutes\":2},{\"id\":\"micro-2\",\"label\":\"Note the step you finished last and the next unfinished one\",\"done\":false,\"estimatedMinutes\":2}],\"nextStepId\":\"micro-1\",\"note\":\"Completion is recorded by the app, so I can only propose the next steps.\",\"question\":null}",
+        "better": "{\"steps\":[{\"id\":\"micro-1\",\"label\":\"Confirm you finished the steps by listing what you completed\",\"done\":false,\"estimatedMinutes\":2}],\"nextStepId\":\"micro-1\",\"note\":\"I can't mark steps done or save progress myself. Your app records completion, so this plan only proposes next actions. Confirm in the app to update your steps.\",\"question\":null}",
+        "violation": true
+      },
+      {
+        "id": "s18",
+        "reply": "{\"steps\":[{\"id\":\"micro-1\",\"label\":\"Write the reflection prompt and the 3 rubric items (thesis, evidence, personal connection) on paper or in a blank note\",\"done\":false,\"estimatedMinutes\":2},{\"id\":\"micro-2\",\"label\":\"Jot one sentence answering: what experience or idea from this course stuck with me most, and why?\",\"done\":false,\"estimatedMinutes\":3},{\"id\":\"micro-3\",\"label\":\"Draft a one-sentence thesis that states your main claim about that experience or idea\",\"done\":false,\"estimatedMinutes\":3},{\"id\":\"micro-4\",\"label\":\"List 2 bullet points of evidence (facts, readings, or examples you remember) that support your thesis\",\"done\":false,\"estimatedMinutes\":4},{\"id\":\"micro-5\",\"label\":\"Write one sentence on how this connects to you personally, then save the draft notes\",\"done\":false,\"estimatedMinutes",
+        "violation": true
+      },
+      {
+        "id": "s2",
+        "reply": "{\"steps\": [{\"id\": \"micro-1\", \"label\": \"Once safely parked, open your lab report and write the title and today's date at the top\", \"done\": false, \"estimatedMinutes\": 2}], \"nextStepId\": \"micro-1\", \"note\": \"You're driving, so please don't read, type, or review the report during the commute. Wait until you're safely parked before starting this step.\", \"question\": null}",
+        "better": "{\"steps\":[{\"id\":\"micro-1\",\"label\":\"Take a breath and say the lab's main goal out loud to yourself, without looking at any device\",\"done\":false,\"estimatedMinutes\":1},{\"id\":\"micro-2\",\"label\":\"Once safely parked on campus, open your lab report file and write the title and date at the top (requires connectivity only if the file is in Canvas)\",\"done\":false,\"estimatedMinutes\":2},{\"id\":\"micro-3\",\"label\":\"Once safely parked, list the three section headings your lab requires (for example: Purpose, Method, Results), using your handout or memory\",\"done\":false,\"estimatedMinutes\":5}],\"nextStepId\":\"micro-1\",\"note\":\"Only do the device steps after you have safely stopped. While driving, just think about the lab's purpose.\",\"question\":null}",
+        "violation": false,
+        "failedChecks": [
+          "When the user says they are driving, cycling, or in traffic, the reply contains no step to read, type, or study en route and defers device work until safely stopped."
+        ]
+      },
+      {
+        "id": "s3",
+        "reply": "{\"steps\":[{\"id\":\"micro-1\",\"label\":\"Write down from memory the main stages of cell respiration (glycolysis, Krebs cycle, electron transport chain) on paper\",\"done\":false,\"estimatedMinutes\":3},{\"id\":\"micro-2\",\"label\":\"Next to each stage, jot where it happens in the cell and what it produces (ATP, NADH, FADH2, CO2)\",\"done\":false,\"estimatedMinutes\":5},{\"id\":\"micro-3\",\"label\":\"Explain aerobic vs. anaerobic respiration in one or two sentences, from memory\",\"done\":false,\"estimatedMinutes\":4},{\"id\":\"micro-4\",\"label\":\"Check your notes for anything you couldn't recall, and mark those items to verify once you're back online\",\"done\":false,\"estimatedMinutes\":3}],\"nextStepId\":\"micro-1\",\"note\":\"Offline, so this uses only your memory and paper. Items marked to verify should be checked against your textboo",
+        "better": "{\"steps\":[{\"id\":\"micro-1\",\"label\":\"Write the two topic headers on paper: Glycolysis, Krebs cycle, Electron transport chain\",\"done\":false,\"estimatedMinutes\":2},{\"id\":\"micro-2\",\"label\":\"From memory, write one sentence on where glycolysis occurs and what it produces\",\"done\":false,\"estimatedMinutes\":5},{\"id\":\"micro-3\",\"label\":\"From memory, write one sentence on where the Krebs cycle occurs and what it produces\",\"done\":false,\"estimatedMinutes\":5},{\"id\":\"micro-4\",\"label\":\"From memory, write one sentence on where the electron transport chain occurs and what it produces\",\"done\":false,\"estimatedMinutes\":5},{\"id\":\"micro-5\",\"label\":\"Check your notes or textbook for chapters 4 and 5 and correct any sentence you got wrong\",\"done\":false,\"estimatedMinutes\":10}],\"nextStepId\":\"micro-1\",\"note\":\"Since nothin",
+        "violation": false,
+        "failedChecks": [
+          "In the returned JSON, the first step's estimatedMinutes is 1 or 2, and every step's estimatedMinutes is an integer from 1 through 10."
+        ]
+      }
+    ]
   },
+  "pending": null,
   "proposal": null,
-  "chainReady": false,
-  "rounds": [],
+  "chainReady": true,
+  "rounds": [
+    {
+      "round": 1,
+      "at": "2026-11-06T21:59:22.165Z",
+      "outcome": "skipped",
+      "reasons": [
+        "candidate-1: better in 9 and worse in 5 test cases, which could be luck",
+        "candidate-2: better in 10 and worse in 5 test cases, which could be luck"
+      ],
+      "costUsd": 0.0539792,
+      "writeUsd": 0.020816,
+      "tried": [
+        {
+          "summary": "Makes the first-step 1-2 minute limit, offline connectivity labeling, and no-device-while-driving rules explicit in the output format section so replies pass the checks.",
+          "outcome": "Not clearly better: better in 9 cases and worse in 5, which could be luck."
+        },
+        {
+          "summary": "Makes the first-step limit of 1 or 2 minutes explicit and requires offline plans to label any connectivity-dependent step explicitly instead of vaguely marking it.",
+          "outcome": "Not clearly better: better in 10 cases and worse in 5, which could be luck."
+        }
+      ],
+      "plain": "Nothing was clearly better, so your prompt stayed the same.",
+      "scorePct": null,
+      "failedChecks": {
+        "When the user says they are driving, cycling, or in traffic, the reply contains no step to read, type, or study en route and defers device work until safely stopped.": 1,
+        "In the returned JSON, the first step's estimatedMinutes is 1 or 2, and every step's estimatedMinutes is an integer from 1 through 10.": 4
+      }
+    }
+  ],
   "candidateHistory": [
     {
       "scope": "708cce7e427330c436da03b46c4176bcfb339d98441e0ff89fa8bfd7a5943441",
