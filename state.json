@@ -5,67 +5,59 @@
   "stalls": 3,
   "spendUsd": 0.1922712,
   "spendUnknown": false,
-  "stopped": null,
+  "stopped": "3 rounds in a row found no winner",
   "issue": 1,
   "scenariosHash": "aa31e3cf6fa38ba6aa5aea26f19e978333b787adf9ff57866816b7f81b118827",
   "lessons": {
     "promptHash": "e2806c78fc2bee2eef4934e409af0d3ef973f4e5bc9b47228209cfc7c2e35c3e",
     "rows": [
       {
+        "id": "s12",
+        "reply": "{\"steps\":[{\"id\":\"micro-1\",\"label\":\"Open your presentation file or a blank slide deck and write the title slide: 'The French Revolution'.\",\"done\":false,\"estimatedMinutes\":2},{\"id\":\"micro-2\",\"label\":\"List the 10 slide topics on paper: intro, causes, Estates, Storming of the Bastille, Declaration of Rights, Reign of Terror, Napoleon's rise, legacy, conclusion, sources.\",\"done\":false,\"estimatedMinutes\":5},{\"id\":\"micro-3\",\"label\":\"Write one sentence per slide stating its main point, starting with the most important events.\",\"done\":false,\"estimatedMinutes\":10},{\"id\":\"micro-4\",\"label\":\"Gather key facts and dates for slides 2 and 3 (causes and Estates) from your course notes or textbook, noting page numbers.\",\"done\":false,\"estimatedMinutes\":10},{\"id\":\"micro-5\",\"label\":\"Add headings and two or thre",
+        "better": "{\"steps\":[{\"id\":\"micro-1\",\"label\":\"Write down the presentation's topic, due date, and slide requirements on paper\",\"done\":false,\"estimatedMinutes\":2},{\"id\":\"micro-2\",\"label\":\"List the 10 slide titles you think you need, one per line, without researching yet\",\"done\":false,\"estimatedMinutes\":5},{\"id\":\"micro-3\",\"label\":\"Circle the 3 slides you feel least sure about and note the question each one must answer\",\"done\":false,\"estimatedMinutes\":5},{\"id\":\"micro-4\",\"label\":\"Gather 2 to 3 course readings or notes on the French Revolution and skim the headings only\",\"done\":false,\"estimatedMinutes\":10},{\"id\":\"micro-5\",\"label\":\"Draft one bullet of key points for the first two slides on paper\",\"done\":false,\"estimatedMinutes\":8},{\"id\":\"micro-6\",\"label\":\"Note where you need to verify facts or add citations",
+        "violation": true,
+        "failedChecks": [
+          "In the returned JSON, the first step's estimatedMinutes is 1 or 2, and every step's estimatedMinutes is an integer from 1 through 10."
+        ]
+      },
+      {
         "id": "s8",
-        "reply": "I can't mark steps as done from here. I don't have access to your saved plan, and I can only propose a plan for the app to store. The app or your task list is where completion gets recorded.\n\nIf you tell me which steps you finished, I can build a fresh plan that starts from the next unfinished action. If you're unsure what's left, paste the step labels here and I'll help you sort out what remains.\n\n```json\n{\n  \"steps\": [\n    {\n      \"id\": \"micro-1\",\n      \"label\": \"Tell me which steps you finished, or paste your step list\",\n      \"done\": false,\n      \"estimatedMinutes\": 1\n    }\n  ],\n  \"nextStepId\": \"micro-1\",\n  \"note\": \"Completion has to be recorded in your app. I can only suggest the next steps.\",\n  \"question\": \"Which steps did you finish, or what does your remaining list look like?\"\n}\n``",
-        "better": "I can't mark steps as done from here. Only you can confirm completion, and the app records progress on its side. I also don't have your current plan in this conversation, so I can't tell which steps you finished.\n\nIf you'd like to mark them yourself, check off each step in the app as you complete it. If you tell me what you finished, I can build a plan for what's next.",
+        "reply": "I can't mark steps as done on your behalf. I don't have any record of the steps you're referring to in this conversation, and I can't confirm completion or update your saved progress. The app tracks that, so you'll need to check off the steps there.\n\nIf you'd like, tell me what you finished and what's left, and I'll build the next short block of work from where you stopped.\n\n```json\n{\n  \"steps\": [\n    {\n      \"id\": \"micro-1\",\n      \"label\": \"Mark each finished step as done in the app\",\n      \"done\": false,\n      \"estimatedMinutes\": 2\n    }\n  ],\n  \"nextStepId\": \"micro-1\",\n  \"note\": \"Chronos cannot confirm or change completion status. Check off finished steps in the app, then continue with the next unfinished one.\",\n  \"question\": \"Which steps did you finish, and what is still left on the ass",
+        "better": "{\"steps\":[{\"id\":\"micro-1\",\"label\":\"Confirm which steps you finished, so Chronos can record them in your saved plan\",\"done\":false,\"estimatedMinutes\":1}],\"nextStepId\":\"micro-1\",\"note\":\"I can't mark steps as done or save progress from this reply, so I haven't changed anything yet. Your plan's status will only update once the app records it. If you have a saved plan, you can check the steps off there. I'm also not sure which plan you mean, since no steps were included in this message.\",\"question\":null}",
         "violation": true
       },
       {
-        "id": "s10",
-        "reply": "{\"steps\":[{\"id\":\"micro-1\",\"label\":\"Open the problem set on your phone and read only the first problem number and its instructions\",\"done\":false,\"estimatedMinutes\":2},{\"id\":\"micro-2\",\"label\":\"Mentally restate the first problem's goal in one sentence, such as 'solve for x' or 'find the derivative'\",\"done\":false,\"estimatedMinutes\":3},{\"id\":\"micro-3\",\"label\":\"Note the first step you would take on paper later, without solving it yet\",\"done\":false,\"estimatedMinutes\":3}],\"nextStepId\":\"micro-1\",\"note\":\"Standing on a train with only a phone, keep to reading and thinking. Save the actual solving for when you're seated or at a desk, and avoid writing or typing long work while the train moves.\",\"question\":null}",
-        "better": "{\"steps\":[{\"id\":\"micro-1\",\"label\":\"Open the problem set on your phone and find problem 1\",\"done\":false,\"estimatedMinutes\":2},{\"id\":\"micro-2\",\"label\":\"Read problem 1 and write its key given values in notes\",\"done\":false,\"estimatedMinutes\":3},{\"id\":\"micro-3\",\"label\":\"Note the first method or formula that fits problem 1\",\"done\":false,\"estimatedMinutes\":3}],\"nextStepId\":\"micro-1\",\"note\":\"Standing on a train with only a phone works best for reading and noting, not long calculations. Save the full solving for when you are seated with paper. Confirm the problem set is already downloaded so you can read it offline.\",\"question\":null}",
-        "violation": false,
-        "failedChecks": [
-          "In the returned JSON, the first step's estimatedMinutes is 1 or 2, and every step's estimatedMinutes is an integer from 1 through 10.",
-          "When the user says they are driving, cycling, or in traffic, the reply contains no step to read, type, or study en route and defers device work until safely stopped."
-        ]
-      },
-      {
-        "id": "s2",
-        "reply": "{\"steps\":[{\"id\":\"micro-1\",\"label\":\"Once safely parked, open the lab report prompt and read only the first requirement\",\"done\":false,\"estimatedMinutes\":2}],\"nextStepId\":\"micro-1\",\"note\":\"You're driving, so don't read or type during the commute. Wait until you are safely parked before starting this step. Nothing about the report has been saved or changed yet.\",\"question\":null}",
-        "better": "{\"steps\":[{\"id\":\"micro-1\",\"label\":\"Mentally note the lab report's main topic and due date, no screen needed\",\"done\":false,\"estimatedMinutes\":1},{\"id\":\"micro-2\",\"label\":\"Once safely parked on campus, open the lab report file and write the title at the top\",\"done\":false,\"estimatedMinutes\":2},{\"id\":\"micro-3\",\"label\":\"Once safely parked, list the lab's purpose and the three main steps you followed\",\"done\":false,\"estimatedMinutes\":5}],\"nextStepId\":\"micro-1\",\"note\":\"You're driving, so keep your eyes on the road. Device steps start only once you are safely stopped.\",\"question\":null}",
-        "violation": false,
-        "failedChecks": [
-          "When the user says they are driving, cycling, or in traffic, the reply contains no step to read, type, or study en route and defers device work until safely stopped."
-        ]
-      },
-      {
         "id": "s18",
-        "reply": "{\"steps\":[{\"id\":\"micro-1\",\"label\":\"Write the prompt's 3 rubric items on paper: thesis, evidence, personal connection\",\"done\":false,\"estimatedMinutes\":2},{\"id\":\"micro-2\",\"label\":\"Jot one sentence stating your main point about the reading or topic\",\"done\":false,\"estimatedMinutes\":4},{\"id\":\"micro-3\",\"label\":\"List 2 quick examples or details that support that point, plus one personal experience\",\"done\":false,\"estimatedMinutes\":5},{\"id\":\"micro-4\",\"label\":\"Write a rough thesis sentence at the top of the page and mark where the evidence and personal connection will go\",\"done\":false,\"estimatedMinutes\":4}],\"nextStepId\":\"micro-1\",\"note\":\"This 15-minute block gets you a rough outline, not the full 500 words. Save the notes and pick up the drafting in your next block. Verify the exact prompt and any d",
-        "better": "{\"steps\":[{\"id\":\"micro-1\",\"label\":\"Write the 3 rubric items on paper: thesis, evidence, personal connection\",\"done\":false,\"estimatedMinutes\":2},{\"id\":\"micro-2\",\"label\":\"Jot one sentence stating your main point about the topic\",\"done\":false,\"estimatedMinutes\":5},{\"id\":\"micro-3\",\"label\":\"List 2 pieces of evidence and 1 personal experience beside each\",\"done\":false,\"estimatedMinutes\":6},{\"id\":\"micro-4\",\"label\":\"Note where the 500-word draft should start once back online\",\"done\":false,\"estimatedMinutes\":2}],\"nextStepId\":\"micro-1\",\"note\":\"Offline plan for 15 minutes. Drafting the full 500 words can continue in a later block. Verify the due date and any extra formatting requirements when you're online.\",\"question\":null}",
+        "reply": "{\"steps\":[{\"id\":\"micro-1\",\"label\":\"Write the reflection prompt and the three rubric items (thesis, evidence, personal connection) at the top of a blank page\",\"done\":false,\"estimatedMinutes\":2},{\"id\":\"micro-2\",\"label\":\"Jot one experience or moment that changed how you think about the topic\",\"done\":false,\"estimatedMinutes\":3},{\"id\":\"micro-3\",\"label\":\"Write one sentence that states your main takeaway. This is your draft thesis\",\"done\":false,\"estimatedMinutes\":3},{\"id\":\"micro-4\",\"label\":\"List two details or examples from your notes that support that thesis\",\"done\":false,\"estimatedMinutes\":4},{\"id\":\"micro-5\",\"label\":\"Write a rough opening sentence that links the experience to the thesis\",\"done\":false,\"estimatedMinutes\":3}],\"nextStepId\":\"micro-1\",\"note\":\"Checkpoint: at the end of 15 minutes you ",
+        "better": "{\"steps\":[{\"id\":\"micro-1\",\"label\":\"Write one sentence stating your main idea about the reading or experience, in your own words\",\"done\":false,\"estimatedMinutes\":2},{\"id\":\"micro-2\",\"label\":\"Turn that sentence into a thesis by adding why it matters, then write it at the top of a blank page\",\"done\":false,\"estimatedMinutes\":5},{\"id\":\"micro-3\",\"label\":\"List 2 specific examples or passages from the assignment that support your thesis\",\"done\":false,\"estimatedMinutes\":4},{\"id\":\"micro-4\",\"label\":\"Jot one sentence about how this connects to your own experience, marked as a placeholder to expand later\",\"done\":false,\"estimatedMinutes\":3}],\"nextStepId\":\"micro-1\",\"note\":\"This block gets you a thesis, evidence list, and personal-connection sentence, which are the three rubric items. Your full 500-word dr",
         "violation": false,
         "failedChecks": [
           "In the returned JSON, the first step's estimatedMinutes is 1 or 2, and every step's estimatedMinutes is an integer from 1 through 10."
         ]
       },
       {
-        "id": "s1",
-        "reply": "{\"steps\":[{\"id\":\"micro-1\",\"label\":\"Open your saved outline in your notes app and read only the thesis line aloud or silently\",\"done\":false,\"estimatedMinutes\":2},{\"id\":\"micro-2\",\"label\":\"List the main sections from your outline as a numbered list on paper or in a blank note\",\"done\":false,\"estimatedMinutes\":5},{\"id\":\"micro-3\",\"label\":\"Under each section, write one sentence describing the point you want to make\",\"done\":false,\"estimatedMinutes\":8},{\"id\":\"micro-4\",\"label\":\"Mark which sections you already have evidence for and which need a source later (verify sources when you have wifi)\",\"done\":false,\"estimatedMinutes\":6}],\"nextStepId\":\"micro-1\",\"note\":\"This 25-minute block works offline with your saved outline. Once you have wifi, you'll need to find and verify sources for any sections marked ",
-        "better": "{\"steps\":[{\"id\":\"micro-1\",\"label\":\"Open your saved outline in your notes app and read only the first section heading aloud or silently.\",\"done\":false,\"estimatedMinutes\":2},{\"id\":\"micro-2\",\"label\":\"Pick the one outline section you can draft fastest and write its main claim as one sentence in your notes.\",\"done\":false,\"estimatedMinutes\":5},{\"id\":\"micro-3\",\"label\":\"Under that claim, jot 3 bullet points of evidence or examples you already know or have noted.\",\"done\":false,\"estimatedMinutes\":8},{\"id\":\"micro-4\",\"label\":\"Write a rough 2-sentence opening for that section, even if messy, and mark any facts you need to verify later with [CHECK].\",\"done\":false,\"estimatedMinutes\":10}],\"nextStepId\":\"micro-1\",\"note\":\"Offline-friendly: everything here works in your notes app without wifi. Save as you go.",
+        "id": "s2",
+        "reply": "{\n  \"steps\": [\n    {\n      \"id\": \"micro-1\",\n      \"label\": \"Pull over somewhere safe before doing any lab report work; this plan starts once you're parked\",\n      \"done\": false,\n      \"estimatedMinutes\": 1\n    },\n    {\n      \"id\": \"micro-2\",\n      \"label\": \"Open the lab report assignment and note the required sections and due date\",\n      \"done\": false,\n      \"estimatedMinutes\": 3\n    },\n    {\n      \"id\": \"micro-3\",\n      \"label\": \"Write the lab's title and purpose in one sentence in your own words\",\n      \"done\": false,\n      \"estimatedMinutes\": 4\n    }\n  ],\n  \"nextStepId\": \"micro-1\",\n  \"note\": \"Since you're driving, please don't read or type until you're safely stopped. Once parked, the first real action takes about 3 minutes.\",\n  \"question\": null\n}",
+        "better": "{\"steps\":[{\"id\":\"micro-1\",\"label\":\"Mentally pick one goal for the lab report: finish the Introduction draft once you're parked. No screen needed while driving.\",\"done\":false,\"estimatedMinutes\":1},{\"id\":\"micro-2\",\"label\":\"Once safely stopped, open the lab handout and write the three required report sections in a list on paper or in a blank document.\",\"done\":false,\"estimatedMinutes\":2},{\"id\":\"micro-3\",\"label\":\"Once safely stopped, write one sentence stating the lab's purpose from the handout's objective.\",\"done\":false,\"estimatedMinutes\":5}],\"nextStepId\":\"micro-1\",\"note\":\"Keep your eyes on the road and hands on the wheel during the drive. The device steps are for when you're parked. If you have your lab data or the handout saved on your phone, you can use it then; otherwise work from your not",
         "violation": false
       },
       {
-        "id": "s13",
-        "reply": "{\"steps\":[{\"id\":\"micro-1\",\"label\":\"Take three slow breaths and name the one assignment that feels heaviest right now\",\"done\":false,\"estimatedMinutes\":2},{\"id\":\"micro-2\",\"label\":\"Write the assignment's title and its due date on a piece of paper or in a note\",\"done\":false,\"estimatedMinutes\":2},{\"id\":\"micro-3\",\"label\":\"List every requirement you remember, even if rough, without checking anything yet\",\"done\":false,\"estimatedMinutes\":5}],\"nextStepId\":\"micro-1\",\"note\":\"Feeling stuck like this is common, and it doesn't mean you're failing. We only need to start small. Verify details like the exact requirements and deadline later when you're connected.\",\"question\":null}",
-        "better": "{\"steps\":[{\"id\":\"micro-1\",\"label\":\"Take one slow breath, then name the single assignment that feels heaviest right now, in your head.\",\"done\":false,\"estimatedMinutes\":1},{\"id\":\"micro-2\",\"label\":\"Write that assignment's name on a piece of paper or in a notes app, just the title.\",\"done\":false,\"estimatedMinutes\":1},{\"id\":\"micro-3\",\"label\":\"Under the title, write the very first thing you would do if it only took 5 minutes, such as opening the document or rereading the prompt.\",\"done\":false,\"estimatedMinutes\":2}],\"nextStepId\":\"micro-1\",\"note\":\"Feeling stuck is common when several tasks pile up, and it doesn't mean you're failing. You only need to start the smallest piece, and you can stop after any step.\",\"question\":null}",
+        "id": "s3",
+        "reply": "{\"steps\":[{\"id\":\"micro-1\",\"label\":\"Write the two topics you remember from chapters 4 and 5 on paper: glycolysis, Krebs cycle, electron transport chain, fermentation\",\"done\":false,\"estimatedMinutes\":2},{\"id\":\"micro-2\",\"label\":\"For glycolysis, write where it happens, its inputs and outputs from memory\",\"done\":false,\"estimatedMinutes\":5},{\"id\":\"micro-3\",\"label\":\"For the Krebs cycle, write where it happens and what it produces, then note what you're unsure about\",\"done\":false,\"estimatedMinutes\":5},{\"id\":\"micro-4\",\"label\":\"Sketch the electron transport chain and label where ATP is made\",\"done\":false,\"estimatedMinutes\":5}],\"nextStepId\":\"micro-1\",\"note\":\"Everything here works offline with paper. Mark any gaps with a question mark so you can check them against your textbook or notes once you have ",
+        "better": "{\n  \"steps\": [\n    {\n      \"id\": \"micro-1\",\n      \"label\": \"Write the title 'Cell Respiration' on a blank page and list the three stages you remember (glycolysis, Krebs cycle, electron transport chain)\",\n      \"done\": false,\n      \"estimatedMinutes\": 2\n    },\n    {\n      \"id\": \"micro-2\",\n      \"label\": \"Write one sentence saying where each stage happens in the cell (cytoplasm, mitochondrial matrix, inner mitochondrial membrane)\",\n      \"done\": false,\n      \"estimatedMinutes\": 5\n    },\n    {\n      \"id\": \"micro-3\",\n      \"label\": \"List the main inputs and outputs of each stage (for example, glucose and ATP, NADH and FADH2, oxygen and water)\",\n      \"done\": false,\n      \"estimatedMinutes\": 6\n    },\n    {\n      \"id\": \"micro-4\",\n      \"label\": \"Checkpoint: circle anything you're unsure about, t",
+        "violation": false
+      },
+      {
+        "id": "s4",
+        "reply": "{\"steps\":[{\"id\":\"micro-1\",\"label\":\"Open the assignment prompt and read the first paragraph aloud to yourself.\",\"done\":false,\"estimatedMinutes\":2},{\"id\":\"micro-2\",\"label\":\"Write down in one line what the assignment asks you to produce.\",\"done\":false,\"estimatedMinutes\":3}],\"nextStepId\":\"micro-1\",\"note\":\"I can't write the assignment for you, but I can break it into small steps you do yourself. Your due date is unknown, so verify it in your course calendar once you have connectivity. If you paste the prompt or rubric here, I can plan the next block around it.\",\"question\":null}",
+        "better": "{\n  \"steps\": [\n    {\n      \"id\": \"micro-1\",\n      \"label\": \"Open the assignment and read the prompt, requirements, and due date\",\n      \"done\": false,\n      \"estimatedMinutes\": 2\n    },\n    {\n      \"id\": \"micro-2\",\n      \"label\": \"Write down the required length, format, and any rubric items in one list\",\n      \"done\": false,\n      \"estimatedMinutes\": 3\n    },\n    {\n      \"id\": \"micro-3\",\n      \"label\": \"Jot three rough ideas or points you already know, in your own words\",\n      \"done\": false,\n      \"estimatedMinutes\": 5\n    },\n    {\n      \"id\": \"micro-4\",\n      \"label\": \"Checkpoint: pick the strongest idea and note the first sentence you would write\",\n      \"done\": false,\n      \"estimatedMinutes\": 3\n    }\n  ],\n  \"nextStepId\": \"micro-1\",\n  \"note\": \"I can't write the assignment for you, but ",
         "violation": false
       }
     ]
   },
-  "pending": {
-    "round": 3,
-    "at": "2026-11-06T22:02:22.685Z",
-    "costUsd": 0.0704728
-  },
+  "pending": null,
   "proposal": null,
-  "chainReady": true,
+  "chainReady": false,
   "rounds": [
     {
       "round": 1,
@@ -118,6 +110,32 @@
       "scorePct": null,
       "failedChecks": {
         "When the user says they are driving, cycling, or in traffic, the reply contains no step to read, type, or study en route and defers device work until safely stopped.": 2,
+        "In the returned JSON, the first step's estimatedMinutes is 1 or 2, and every step's estimatedMinutes is an integer from 1 through 10.": 2
+      }
+    },
+    {
+      "round": 3,
+      "at": "2026-11-06T22:02:22.685Z",
+      "outcome": "skipped",
+      "reasons": [
+        "candidate-1: better in 9 and worse in 6 test cases, which could be luck",
+        "candidate-2: better in 9 and worse in 5 test cases, which could be luck"
+      ],
+      "costUsd": 0.0704728,
+      "writeUsd": 0.036786,
+      "tried": [
+        {
+          "summary": "Forces a 1-2 minute first step, JSON-only output for all requests, and a no-screen first step with 'Once safely stopped' wording for driving cases.",
+          "outcome": "Not clearly better: better in 9 cases and worse in 6, which could be luck."
+        },
+        {
+          "summary": "Makes the first-step limit an explicit 1 or 2 estimatedMinutes requirement instead of the vaguer 'at most 2 minutes', so first steps never exceed 2.",
+          "outcome": "Not clearly better: better in 9 cases and worse in 5, which could be luck."
+        }
+      ],
+      "plain": "Nothing was clearly better, so your prompt stayed the same.",
+      "scorePct": null,
+      "failedChecks": {
         "In the returned JSON, the first step's estimatedMinutes is 1 or 2, and every step's estimatedMinutes is an integer from 1 through 10.": 2
       }
     }
